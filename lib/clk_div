@@ -1,0 +1,122 @@
+#! /usr/bin/vvp
+:ivl_version "11.0 (stable)" "(v11_0)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/lib/ivl/system.vpi";
+:vpi_module "/usr/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/lib/ivl/v2005_math.vpi";
+:vpi_module "/usr/lib/ivl/va_math.vpi";
+S_0x55711f9068e0 .scope module, "clk_div_tb" "clk_div_tb" 2 1;
+ .timescale 0 0;
+P_0x55711f8cc440 .param/l "FREQ" 0 2 3, +C4<00000000000000001001110001000000>;
+P_0x55711f8cc480 .param/l "PERIOD" 0 2 4, +C4<00000000000000000000001111101000>;
+P_0x55711f8cc4c0 .param/l "WIDTH" 0 2 2, +C4<00000000000000000000000000010000>;
+L_0x55711f8f2650 .functor AND 1, v0x55711f91bf20_0, v0x55711f91b890_0, C4<1>, C4<1>;
+v0x55711f91bad0_0 .var "clk", 0 0;
+v0x55711f91bbe0_0 .net "clk_out", 0 0, v0x55711f91b6f0_0;  1 drivers
+v0x55711f91bca0_0 .net "cnt", 15 0, v0x55711f907070_0;  1 drivers
+v0x55711f91bd90_0 .net "cnt_rstn", 0 0, v0x55711f91b890_0;  1 drivers
+v0x55711f91be30_0 .net "counter_rstn", 0 0, L_0x55711f8f2650;  1 drivers
+v0x55711f91bf20_0 .var "rstn", 0 0;
+S_0x55711f906b60 .scope module, "c0" "counter" 2 14, 3 1 0, S_0x55711f9068e0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "clk";
+    .port_info 1 /INPUT 1 "rstn";
+    .port_info 2 /OUTPUT 16 "cnt";
+P_0x55711f906d40 .param/l "WIDTH" 0 3 2, +C4<00000000000000000000000000010000>;
+v0x55711f907260_0 .net "clk", 0 0, v0x55711f91bad0_0;  1 drivers
+v0x55711f907070_0 .var "cnt", 15 0;
+v0x55711f908710_0 .net "rstn", 0 0, v0x55711f91bf20_0;  1 drivers
+E_0x55711f903750 .event posedge, v0x55711f907260_0;
+S_0x55711f91b330 .scope module, "cd0" "clk_div" 2 18, 4 1 0, S_0x55711f9068e0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "clk";
+    .port_info 1 /INPUT 1 "rstn";
+    .port_info 2 /INPUT 16 "cnt";
+    .port_info 3 /OUTPUT 1 "clk_out";
+    .port_info 4 /OUTPUT 1 "cnt_rstn";
+P_0x55711f8ef960 .param/l "N" 0 4 4, +C4<00000000000000000000000000000100>;
+P_0x55711f8ef9a0 .param/l "WIDTH" 0 4 2, +C4<00000000000000000000000000010000>;
+v0x55711f8f27b0_0 .net "clk", 0 0, v0x55711f91bad0_0;  alias, 1 drivers
+v0x55711f91b6f0_0 .var "clk_out", 0 0;
+v0x55711f91b790_0 .net "cnt", 15 0, v0x55711f907070_0;  alias, 1 drivers
+v0x55711f91b890_0 .var "cnt_rstn", 0 0;
+v0x55711f91b930_0 .net "rstn", 0 0, v0x55711f91bf20_0;  alias, 1 drivers
+    .scope S_0x55711f906b60;
+T_0 ;
+    %wait E_0x55711f903750;
+    %load/vec4 v0x55711f908710_0;
+    %cmpi/e 0, 0, 1;
+    %jmp/0xz  T_0.0, 4;
+    %pushi/vec4 0, 0, 16;
+    %assign/vec4 v0x55711f907070_0, 0;
+    %jmp T_0.1;
+T_0.0 ;
+    %load/vec4 v0x55711f907070_0;
+    %addi 1, 0, 16;
+    %assign/vec4 v0x55711f907070_0, 0;
+T_0.1 ;
+    %jmp T_0;
+    .thread T_0;
+    .scope S_0x55711f91b330;
+T_1 ;
+    %wait E_0x55711f903750;
+    %load/vec4 v0x55711f91b930_0;
+    %cmpi/e 0, 0, 1;
+    %jmp/0xz  T_1.0, 4;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v0x55711f91b6f0_0, 0;
+    %jmp T_1.1;
+T_1.0 ;
+    %load/vec4 v0x55711f91b790_0;
+    %pad/u 32;
+    %cmpi/e 3, 0, 32;
+    %jmp/0xz  T_1.2, 4;
+    %load/vec4 v0x55711f91b6f0_0;
+    %inv;
+    %assign/vec4 v0x55711f91b6f0_0, 0;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v0x55711f91b890_0, 0;
+    %jmp T_1.3;
+T_1.2 ;
+    %pushi/vec4 1, 0, 1;
+    %assign/vec4 v0x55711f91b890_0, 0;
+T_1.3 ;
+T_1.1 ;
+    %jmp T_1;
+    .thread T_1;
+    .scope S_0x55711f9068e0;
+T_2 ;
+    %vpi_call 2 25 "$dumpfile", "clk_div.vcd" {0 0 0};
+    %vpi_call 2 26 "$dumpvars", 32'sb00000000000000000000000000000000, S_0x55711f9068e0 {0 0 0};
+    %end;
+    .thread T_2;
+    .scope S_0x55711f9068e0;
+T_3 ;
+    %delay 1, 0;
+    %load/vec4 v0x55711f91bad0_0;
+    %inv;
+    %assign/vec4 v0x55711f91bad0_0, 0;
+    %jmp T_3;
+    .thread T_3;
+    .scope S_0x55711f9068e0;
+T_4 ;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v0x55711f91bad0_0, 0;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v0x55711f91bf20_0, 0;
+    %delay 2, 0;
+    %pushi/vec4 1, 0, 1;
+    %assign/vec4 v0x55711f91bf20_0, 0;
+    %delay 1000, 0;
+    %vpi_call 2 39 "$finish" {0 0 0};
+    %end;
+    .thread T_4;
+# The file index is used to find the file name in the following table.
+:file_names 5;
+    "N/A";
+    "<interactive>";
+    "clk_div_tb.v";
+    "counter.v";
+    "clk_div.v";
