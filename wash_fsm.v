@@ -15,20 +15,21 @@ module wash_fsm # (
     input clk,		// 1Hz
     input rst_n,
     input start,
-    input [WIDTH-1:0] cnt,
     // 0 for stop, 1 for clockwise, 2 for counterclockwise, 3 undefined
-    output reg [2:0] motor,
+    output [1:0] motor,
     // 0 for stopping, 1 for working
     // negedge indicate completion
-    output compl_n,
-    output clear
+    output compl_n
 );
 
-wire reg [2:0] state;
+wire [WIDTH-1:0] cnt;
+reg [1:0] state;
+wire clear;
+reg clear_reg;
 
-counter c0	(	.clk(clk),
-			.rst_n(rst_n),
-			.cnt(cnt));
+counter #(.WIDTH(WIDTH))    c0	(	.clk(clk),
+			                        .rst_n(clear),
+			                        .cnt(cnt));
 
 assign motor = (state == S1 ? M1 :
                 state == S2 ? M0 :
@@ -40,32 +41,34 @@ assign compl_n = (  state == S1 ? 1 :
                     state == S3 ? 1 :
                     state == S4 ? 1 : 0);
 
+assign clear = rst_n | clear_reg;
+
 always@(posedge clk) begin
     if (~rst_n) begin
         state <= S0;
         compl_n <= 0;
-        clear <= 0;
+        clear_reg <= 0;
     end
     case(state)
         S1: begin
             state <= (cnt == CW ? S2 : state);
-            clear <= (cnt == CW ? 1 : 0);
+            clear_reg <= (cnt == CW ? 1 : 0);
         end
         S2: begin
             state <= (cnt == PAUSE ? S3 : state);
-            clear <= (cnt == PAUSE ? 1 : 0);
+            clear_reg <= (cnt == PAUSE ? 1 : 0);
         end
         S3: begin
             state <= (cnt == CCW ? S4 : state);
-            clear <= (cnt == CCW ? 1 : 0);
+            clear_reg <= (cnt == CCW ? 1 : 0);
         end
         S4: begin
             state <= (cnt == PAUSE ? S0 : state);
-            clear <= (cnt == PAUSE ? 1 : 0);
+            clear_reg <= (cnt == PAUSE ? 1 : 0);
         end
         default: begin
             state <= S0;
-            clear <= 0;
+            clear_reg <= 0;
         end
     endcase
 end
