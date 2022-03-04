@@ -1,5 +1,5 @@
 module wash_fsm # (
-    paramtere WIDTH = 5,
+    parameter WIDTH = 5,
     parameter CW = 20,
     parameter CCW = 20,
     parameter PAUSE = 10,
@@ -12,7 +12,7 @@ module wash_fsm # (
     parameter M1 = 1,
     parameter M2 = 2
 ) (
-    input clk,
+    input clk,		// 1Hz
     input rst_n,
     input start,
     input [WIDTH-1:0] cnt,
@@ -25,6 +25,10 @@ module wash_fsm # (
 );
 
 wire reg [2:0] state;
+
+counter c0	(	.clk(clk),
+			.rst_n(rst_n),
+			.cnt(cnt));
 
 assign motor = (state == S1 ? M1 :
                 state == S2 ? M0 :
