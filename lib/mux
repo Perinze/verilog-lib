@@ -1,0 +1,59 @@
+#! /usr/local/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-955-gd6e01d0c)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/local/lib/ivl/system.vpi";
+:vpi_module "/usr/local/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/local/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/local/lib/ivl/v2005_math.vpi";
+:vpi_module "/usr/local/lib/ivl/va_math.vpi";
+S_0x55c475d6e320 .scope module, "mux_tb" "mux_tb" 2 1;
+ .timescale 0 0;
+v0x55c475d90d90_0 .var "a", 0 0;
+v0x55c475d90e50_0 .var "b", 0 0;
+v0x55c475d90f20_0 .net "out", 0 0, L_0x55c475d910f0;  1 drivers
+v0x55c475d91020_0 .var "s", 0 0;
+S_0x55c475d6e4b0 .scope module, "m0" "mux" 2 8, 3 1 0, S_0x55c475d6e320;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "s";
+    .port_info 1 /INPUT 1 "da";
+    .port_info 2 /INPUT 1 "db";
+    .port_info 3 /OUTPUT 1 "out";
+v0x55c475d47ba0_0 .net "da", 0 0, v0x55c475d90d90_0;  1 drivers
+v0x55c475d90a90_0 .net "db", 0 0, v0x55c475d90e50_0;  1 drivers
+v0x55c475d90b50_0 .net "out", 0 0, L_0x55c475d910f0;  alias, 1 drivers
+v0x55c475d90c20_0 .net "s", 0 0, v0x55c475d91020_0;  1 drivers
+L_0x55c475d910f0 .functor MUXZ 1, v0x55c475d90d90_0, v0x55c475d90e50_0, v0x55c475d91020_0, C4<>;
+    .scope S_0x55c475d6e320;
+T_0 ;
+    %vpi_call 2 14 "$dumpfile", "mux.vcd" {0 0 0};
+    %vpi_call 2 15 "$dumpvars", 32'sb00000000000000000000000000000000, S_0x55c475d6e320 {0 0 0};
+    %end;
+    .thread T_0;
+    .scope S_0x55c475d6e320;
+T_1 ;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v0x55c475d90d90_0, 0;
+    %pushi/vec4 1, 0, 1;
+    %assign/vec4 v0x55c475d90e50_0, 0;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v0x55c475d91020_0, 0;
+    %delay 2, 0;
+    %pushi/vec4 1, 0, 1;
+    %assign/vec4 v0x55c475d91020_0, 0;
+    %delay 5, 0;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v0x55c475d91020_0, 0;
+    %delay 8, 0;
+    %pushi/vec4 1, 0, 1;
+    %assign/vec4 v0x55c475d91020_0, 0;
+    %delay 10, 0;
+    %vpi_call 2 26 "$finish" {0 0 0};
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "lib/mux_tb.v";
+    "lib/mux.v";
